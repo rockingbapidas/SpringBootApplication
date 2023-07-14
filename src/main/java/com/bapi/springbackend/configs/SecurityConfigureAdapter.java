@@ -1,14 +1,15 @@
-package com.bapi.springbackend.auth;
+package com.bapi.springbackend.configs;
 
 import com.bapi.springbackend.auth.authorization.AuthEntryPointJwt;
 import com.bapi.springbackend.auth.jwt.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,20 +18,20 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.logging.Logger;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@EnableConfigurationProperties(SecurityProperties.class)
 public class SecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
     private final String TAG = SecurityConfigureAdapter.class.getSimpleName();
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    private AuthEntryPointJwt authEntryPointJwt;
-    @Autowired
     private JwtRequestFilter jwtRequestFilter;
+    @Autowired
+    private AuthEntryPointJwt authEntryPointJwt;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -49,7 +50,7 @@ public class SecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login", "/signup")
+                .antMatchers("/login", "/signup", "/graphql", "/graphiql")
                 .permitAll()
                 .anyRequest()
                 .authenticated();

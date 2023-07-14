@@ -3,19 +3,18 @@ package com.bapi.springbackend.service;
 import com.bapi.springbackend.auth.header.HeaderParams;
 import com.bapi.springbackend.auth.session.ISessionManager;
 import com.bapi.springbackend.domain.Order;
-import com.bapi.springbackend.domain.Person;
 import com.bapi.springbackend.exceptions.OrderDetailNotFound;
-import com.bapi.springbackend.mapper.IMapper;
 import com.bapi.springbackend.managers.IOrderDataMapper;
+import com.bapi.springbackend.mapper.IMapper;
 import com.bapi.springbackend.repository.IOrderRepository;
 import com.bapi.springbackend.repository.IPersonRepository;
 import com.bapi.springbackend.request.PlaceOrderRequest;
 import com.bapi.springbackend.response.OrderResponse;
+import com.bapi.springbackend.response.PartialOrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +31,9 @@ public class OrderService implements IOrderService {
     private IOrderDataMapper iOrderDataMapper;
     @Autowired
     private IMapper<Order, OrderResponse> orderOrderResponseIMapper;
+
+    @Autowired
+    private IMapper<Order, PartialOrderResponse> orderPartialOrderResponseIMapper;
     @Autowired
     private IMapper<PlaceOrderRequest, Order> placeOrderRequestOrderIMapper;
 
@@ -43,11 +45,11 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<OrderResponse> getAllOrdersByUserId(HeaderParams headerParams) {
+    public List<PartialOrderResponse> getAllOrdersByUserId(HeaderParams headerParams) {
         Long userId = sessionManager.extractUserIdFromHeader(headerParams);
         List<Order> orderList = orderRepository.findAllByUserId(userId);
         return orderList.stream()
-                .map(orderOrderResponseIMapper::mapFrom)
+                .map(orderPartialOrderResponseIMapper::mapFrom)
                 .collect(Collectors.toList());
     }
 

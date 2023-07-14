@@ -1,14 +1,14 @@
 package com.bapi.springbackend.service;
 
-import com.bapi.springbackend.auth.creation.UpdateAccount;
-import com.bapi.springbackend.auth.header.HeaderParams;
 import com.bapi.springbackend.auth.authorization.IAuthTokenManager;
 import com.bapi.springbackend.auth.creation.Account;
 import com.bapi.springbackend.auth.creation.CreateAccount;
 import com.bapi.springbackend.auth.creation.IAccountManager;
+import com.bapi.springbackend.auth.creation.UpdateAccount;
+import com.bapi.springbackend.auth.header.HeaderParams;
 import com.bapi.springbackend.auth.session.ISessionManager;
-import com.bapi.springbackend.domain.Token;
 import com.bapi.springbackend.domain.Person;
+import com.bapi.springbackend.domain.Token;
 import com.bapi.springbackend.exceptions.SomeThingWentWrong;
 import com.bapi.springbackend.exceptions.UserInfoNotFound;
 import com.bapi.springbackend.mapper.IMapper;
@@ -70,20 +70,27 @@ public class AuthService implements IAuthService {
     }
 
     @Override
+    public UserDataResponse getUserDetails(HeaderParams headerParams) throws Throwable {
+        Logger.getLogger(TAG).info("getUserDetails " + headerParams);
+        Long accountId = sessionManager.extractUserIdFromHeader(headerParams);
+        Account account = accountManager.getAccount(accountId);
+        return userDataResponseMapper.mapFrom((Person) account.getAccountDetails());
+    }
+
+    @Override
     public ProfileUpdateResponse update(ProfileUpdateRequest profileUpdateRequest, HeaderParams headerParams) throws Throwable {
         Logger.getLogger(TAG).info("Update " + profileUpdateRequest);
-        boolean update = accountManager.updateAccount(updateAccountMapper.mapFrom(profileUpdateRequest),
-                sessionManager.extractUserIdFromHeader(headerParams));
-        if (update) {
-            return new ProfileUpdateResponse(true);
-        }
-        throw new UserInfoNotFound();
+        Long accountId = sessionManager.extractUserIdFromHeader(headerParams);
+        UpdateAccount updateAccount = updateAccountMapper.mapFrom(profileUpdateRequest);
+        boolean update = accountManager.updateAccount(updateAccount, accountId);
+        return new ProfileUpdateResponse(update);
     }
 
     @Override
     public AuthResponse signup(SignupRequest signupRequest, HeaderParams headerParams) throws Throwable {
         Logger.getLogger(TAG).info("Signup " + signupRequest);
-        Account account = accountManager.createAccount(createAccountMapper.mapFrom(signupRequest));
+        CreateAccount createAccount = createAccountMapper.mapFrom(signupRequest);
+        Account account = accountManager.createAccount(createAccount);
         if (account.getAccountDetails() != null) {
             Person newPerson = (Person) account.getAccountDetails();
             Token token = authTokenManager.createToken(newPerson, headerParams.getDeviceType(),

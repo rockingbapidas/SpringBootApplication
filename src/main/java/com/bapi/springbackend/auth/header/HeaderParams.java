@@ -1,6 +1,8 @@
 package com.bapi.springbackend.auth.header;
 
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.bapi.springbackend.auth.header.HeaderUtils.*;
@@ -40,6 +42,18 @@ public class HeaderParams {
 
         public HeaderParamsBuilder setHeaders(Map<String, String> headerMap) {
             this.headerMap = headerMap;
+            return this;
+        }
+
+        public HeaderParamsBuilder setHeaders(HttpServletRequest httpServletRequest) {
+            if (headerMap == null) {
+                headerMap = new HashMap<>();
+            }
+            httpServletRequest.getHeaderNames()
+                    .asIterator()
+                    .forEachRemaining(name ->
+                            headerMap.put(name, httpServletRequest.getHeader(name))
+                    );
             return this;
         }
 

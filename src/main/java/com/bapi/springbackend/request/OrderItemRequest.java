@@ -6,11 +6,11 @@ import com.google.gson.annotations.SerializedName;
 public class OrderItemRequest {
 
     @SerializedName("amount")
-    private Double mAmount;
+    private double mAmount;
     @SerializedName("name")
     private String mName;
     @SerializedName("price")
-    private Double mPrice;
+    private double mPrice;
 
     public Double getAmount() {
         return mAmount;

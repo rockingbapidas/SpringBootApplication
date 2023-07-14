@@ -1,19 +1,23 @@
 package com.bapi.springbackend.repository;
 
-import com.bapi.springbackend.dao.*;
+import com.bapi.springbackend.dao.IUserDataEntityDao;
+import com.bapi.springbackend.dao.IUserEntityDao;
+import com.bapi.springbackend.dao.UserDataEntity;
+import com.bapi.springbackend.dao.UserEntity;
 import com.bapi.springbackend.domain.Person;
 import com.bapi.springbackend.domain.PersonDetails;
 import com.bapi.springbackend.mapper.IMapper;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Repository
 public class PersonRepository implements IPersonRepository {
@@ -43,8 +47,7 @@ public class PersonRepository implements IPersonRepository {
     @Override
     public List<Person> findAll() {
         Logger.getLogger(TAG).info("findAll ");
-        return StreamSupport.stream(userEntityDao.findAll().spliterator(), false)
-                .collect(Collectors.toList()).stream()
+        return new ArrayList<>(userEntityDao.findAll()).stream()
                 .map(this::mapToPerson)
                 .collect(Collectors.toList());
     }
@@ -61,6 +64,7 @@ public class PersonRepository implements IPersonRepository {
         return saveOrUpdate(person, true);
     }
 
+    @Transactional
     private Person saveOrUpdate(Person person, boolean isUpdate) {
         Logger.getLogger(TAG).info("saveOrUpdate " + person + " " + isUpdate);
         UserEntity userEntity = userEntityIMapper.mapFrom(person);
@@ -70,17 +74,18 @@ public class PersonRepository implements IPersonRepository {
             userDataEntity.setId(person.getPersonDetails().getId());
             userDataEntity.setUserId(person.getId());
             UserEntity newUserEntity = userEntityDao.save(userEntity);
-            userDetailsEntityDao.save(userDataEntity);
+            UserDataEntity newUserDataEntity = userDetailsEntityDao.save(userDataEntity);
             return userEntityPersonIMapper.mapFrom(newUserEntity);
         } else {
             UserEntity newUserEntity = userEntityDao.save(userEntity);
             userDataEntity.setUserId(newUserEntity.getUserId());
-            userDetailsEntityDao.save(userDataEntity);
+            UserDataEntity newUserDataEntity = userDetailsEntityDao.save(userDataEntity);
             return userEntityPersonIMapper.mapFrom(newUserEntity);
         }
     }
 
     @Override
+    @Transactional
     public void delete(Person person) {
         Logger.getLogger(TAG).info("delete " + person);
         userDetailsEntityDao.deleteById(person.getId());

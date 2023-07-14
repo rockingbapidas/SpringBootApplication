@@ -1,6 +1,9 @@
 package com.bapi.springbackend.repository;
 
-import com.bapi.springbackend.dao.*;
+import com.bapi.springbackend.dao.IOrderEntityDao;
+import com.bapi.springbackend.dao.IOrderItemEntityDao;
+import com.bapi.springbackend.dao.OrderEntity;
+import com.bapi.springbackend.dao.OrderItemEntity;
 import com.bapi.springbackend.domain.Order;
 import com.bapi.springbackend.domain.OrderItem;
 import com.bapi.springbackend.mapper.IMapper;
@@ -11,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Repository
 public class OrderRepository implements IOrderRepository {
@@ -46,8 +48,7 @@ public class OrderRepository implements IOrderRepository {
     @Override
     public List<Order> findAll() {
         Logger.getLogger(TAG).info("findAll ");
-        return StreamSupport.stream(orderEntityDao.findAll().spliterator(), false)
-                .collect(Collectors.toList())
+        return new ArrayList<>(orderEntityDao.findAll())
                 .stream()
                 .map(orderIMapper::mapFrom)
                 .collect(Collectors.toList());
@@ -99,9 +100,7 @@ public class OrderRepository implements IOrderRepository {
                 .map(orderItemEntityIMapper::mapFrom)
                 .peek(orderItemEntity -> orderItemEntity.setOrderId(orderEntity.getOrderId()))
                 .collect(Collectors.toSet());
-        Set<OrderItemEntity> newOrderItemEntities = StreamSupport
-                .stream(orderItemEntityDao.saveAll(orderItemEntities).spliterator(), false)
-                .collect(Collectors.toSet());
+        Set<OrderItemEntity> newOrderItemEntities = new HashSet<>(orderItemEntityDao.saveAll(orderItemEntities));
         Order savedOrder = orderIMapper.mapFrom(orderEntity);
         savedOrder.setOrderItems(newOrderItemEntities
                 .stream()

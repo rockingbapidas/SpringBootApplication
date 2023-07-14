@@ -6,6 +6,7 @@ import com.bapi.springbackend.request.ProfileUpdateRequest;
 import com.bapi.springbackend.request.SignupRequest;
 import com.bapi.springbackend.response.AuthResponse;
 import com.bapi.springbackend.response.ProfileUpdateResponse;
+import com.bapi.springbackend.response.UserDataResponse;
 
 public interface IAuthService {
     AuthResponse signup(SignupRequest signupRequest, HeaderParams build) throws Throwable;
@@ -13,6 +14,8 @@ public interface IAuthService {
     ProfileUpdateResponse update(ProfileUpdateRequest profileUpdateRequest, HeaderParams build) throws Throwable;
 
     AuthResponse login(LoginRequest loginRequest, HeaderParams build) throws Throwable;
+
+    UserDataResponse getUserDetails(HeaderParams build) throws Throwable;
 
     void logout(HeaderParams build) throws Throwable;
 }

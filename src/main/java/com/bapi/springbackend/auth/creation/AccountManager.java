@@ -4,7 +4,6 @@ import com.bapi.springbackend.domain.Person;
 import com.bapi.springbackend.domain.PersonDetails;
 import com.bapi.springbackend.exceptions.AccountAlreadyExist;
 import com.bapi.springbackend.exceptions.AccountDoesNotExist;
-import com.bapi.springbackend.exceptions.UserDetailsNotFound;
 import com.bapi.springbackend.mapper.IMapper;
 import com.bapi.springbackend.repository.IPersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,7 @@ public class AccountManager implements IAccountManager {
         Logger.getLogger(TAG).info("create " + createAccount);
         if (userRepository.findByUserName(createAccount.getUserName()) == null) {
             Person newPerson = personMapper.mapFrom(createAccount);
-            userRepository.save(newPerson);
-            Person savedPerson = userRepository.findByUserName(createAccount.getUserName());
+            Person savedPerson = userRepository.save(newPerson);
             return Account.builder()
                     .setCreated(true)
                     .setCreatedAt(System.currentTimeMillis())
@@ -60,8 +58,23 @@ public class AccountManager implements IAccountManager {
                 personDetails.setPhoneNo(updateAccount.getPhoneNo());
             }
             person.setPersonDetails(personDetails);
-            userRepository.update(person);
-            return true;
+
+            Person updatedPerson = userRepository.update(person);
+            return updatedPerson != null;
+        }
+        throw new AccountDoesNotExist();
+    }
+
+    @Override
+    public Account getAccount(Long accountId) throws Throwable {
+        Logger.getLogger(TAG).info("getAccount " + accountId);
+        Person person = userRepository.findById(accountId);
+        if (person != null) {
+            return Account.builder()
+                    .setCreated(true)
+                    .setCreatedAt(System.currentTimeMillis())
+                    .setAccountDetails(person)
+                    .build();
         }
         throw new AccountDoesNotExist();
     }
