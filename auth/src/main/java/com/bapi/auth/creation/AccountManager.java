@@ -1,5 +1,6 @@
 package com.bapi.auth.creation;
 
+import com.bapi.auth.authorization.exception.UserDetailsNotFound;
 import com.bapi.auth.creation.exception.AccountAlreadyExist;
 import com.bapi.auth.creation.exception.AccountDoesNotExist;
 import com.bapi.data.DataApi;
@@ -34,10 +35,10 @@ public class AccountManager implements IAccountManager {
             PersonDetails savedPersonDetails = dataApi.userDataRepository().save(personDetails);
 
             return Account.builder()
-                    .setCreated(true)
-                    .setCreatedAt(System.currentTimeMillis())
-                    .setAccount(savedPerson)
-                    .setAccountDetails(savedPersonDetails)
+                    .isCreated(true)
+                    .createdAt(System.currentTimeMillis())
+                    .account(savedPerson)
+                    .accountDetails(savedPersonDetails)
                     .build();
         }
         throw new AccountAlreadyExist();
@@ -66,7 +67,7 @@ public class AccountManager implements IAccountManager {
             PersonDetails updatedPersonDetails = dataApi.userDataRepository().update(personDetails, String.valueOf(accountId));
             return updatedPersonDetails != null;
         }
-        throw new AccountDoesNotExist();
+        throw new UserDetailsNotFound();
     }
 
     @Override
@@ -75,12 +76,15 @@ public class AccountManager implements IAccountManager {
         Person person = dataApi.userRepository().findById(accountId);
         if (person != null) {
             PersonDetails personDetails = dataApi.userDataRepository().findByUserId(accountId);
-            return Account.builder()
-                    .setCreated(true)
-                    .setCreatedAt(System.currentTimeMillis())
-                    .setAccount(person)
-                    .setAccountDetails(personDetails)
-                    .build();
+            if (personDetails != null) {
+                return Account.builder()
+                        .isCreated(true)
+                        .createdAt(System.currentTimeMillis())
+                        .account(person)
+                        .accountDetails(personDetails)
+                        .build();
+            }
+            throw new UserDetailsNotFound();
         }
         throw new AccountDoesNotExist();
     }
@@ -88,13 +92,15 @@ public class AccountManager implements IAccountManager {
     @Override
     public boolean deleteAccount(Long accountId) throws Throwable {
         Logger.getLogger(TAG).info("deleteAccount " + accountId);
+
         Person person = dataApi.userRepository().findById(accountId);
+        if (person == null) throw new AccountDoesNotExist();
+        dataApi.userRepository().delete(person);
+
         PersonDetails personDetails = dataApi.userDataRepository().findByUserId(accountId);
-        if (person != null) {
-            dataApi.userRepository().delete(person);
-            dataApi.userDataRepository().delete(personDetails);
-            return true;
-        }
-        throw new AccountDoesNotExist();
+        if (personDetails == null) throw new UserDetailsNotFound();
+        dataApi.userDataRepository().delete(personDetails);
+
+        return true;
     }
 }

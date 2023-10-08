@@ -1,8 +1,8 @@
 package com.bapi.data.repository.impl;
 
-import com.bapi.data.dao.IdTokenEntityDao;
 import com.bapi.data.entity.IdTokenEntity;
 import com.bapi.data.repository.ITokenRepository;
+import com.bapi.data.source.ITokenDataSource;
 import com.bapi.domain.IMapper;
 import com.bapi.domain.Token;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class TokenRepository implements ITokenRepository {
     private final String TAG = TokenRepository.class.getSimpleName();
     @Autowired
-    private IdTokenEntityDao tokenEntityDao;
+    private ITokenDataSource tokenEntityDao;
     @Autowired
     private IMapper<Token, IdTokenEntity> tokenEntityIMapper;
 

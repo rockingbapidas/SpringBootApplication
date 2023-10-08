@@ -9,23 +9,23 @@ import org.springframework.stereotype.Component;
 public class AccountDetailsMapper implements IMapper<CreateAccount, PersonDetails> {
     @Override
     public PersonDetails mapFrom(CreateAccount createAccount) {
-        return new PersonDetails(
-                createAccount.getFullName(),
-                createAccount.getPhoneNo(),
-                createAccount.getPicture(),
-                createAccount.getFirstName(),
-                createAccount.getLastName()
-        );
+        return PersonDetails.builder()
+                .firstName(createAccount.getFirstName())
+                .lastName(createAccount.getLastName())
+                .fullName(createAccount.getFullName())
+                .phoneNo(createAccount.getPhoneNo())
+                .picture(createAccount.getPicture())
+                .build();
     }
 
     @Override
     public CreateAccount mapTo(PersonDetails personDetails) {
         return CreateAccount.builder()
-                .setFirstName(personDetails.getFirstName())
-                .setLastName(personDetails.getLastName())
-                .setFullName(personDetails.getFullName())
-                .setPhoneNo(personDetails.getPhoneNo())
-                .setPicture(personDetails.getPicture())
+                .firstName(personDetails.getFirstName())
+                .lastName(personDetails.getLastName())
+                .fullName(personDetails.getFullName())
+                .phoneNo(personDetails.getPhoneNo())
+                .picture(personDetails.getPicture())
                 .build();
     }
 }

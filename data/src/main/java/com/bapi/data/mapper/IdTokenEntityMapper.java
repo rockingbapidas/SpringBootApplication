@@ -9,25 +9,25 @@ import org.springframework.stereotype.Component;
 public class IdTokenEntityMapper implements IMapper<Token, IdTokenEntity> {
     @Override
     public IdTokenEntity mapFrom(Token token) {
-        IdTokenEntity idTokenEntity = new IdTokenEntity();
-        idTokenEntity.setDeviceUniqueId(token.getDeviceUniqueId());
-        idTokenEntity.setDeviceType(token.getDeviceType());
-        idTokenEntity.setAccessToken(token.getAccessToken());
-        idTokenEntity.setTokenType(token.getTokenType());
-        idTokenEntity.setExpiresAt(token.getExpiresAt());
-        idTokenEntity.setUserName(token.getUserName());
-        return idTokenEntity;
+        return IdTokenEntity.builder()
+                .deviceUniqueId(token.getDeviceUniqueId())
+                .deviceType(token.getDeviceType())
+                .accessToken(token.getAccessToken())
+                .tokenType(token.getTokenType())
+                .expiresAt(token.getExpiresAt())
+                .userName(token.getUserName())
+                .build();
     }
 
     @Override
     public Token mapTo(IdTokenEntity idTokenEntity) {
-        return new Token(
-                idTokenEntity.getDeviceUniqueId(),
-                idTokenEntity.getDeviceType(),
-                idTokenEntity.getExpiresAt(),
-                idTokenEntity.getAccessToken(),
-                idTokenEntity.getTokenType(),
-                idTokenEntity.getUserName()
-        );
+        return Token.builder()
+                .deviceUniqueId(idTokenEntity.getDeviceUniqueId())
+                .deviceType(idTokenEntity.getDeviceType())
+                .expiresAt(idTokenEntity.getExpiresAt())
+                .accessToken(idTokenEntity.getAccessToken())
+                .tokenType(idTokenEntity.getTokenType())
+                .userName(idTokenEntity.getUserName())
+                .build();
     }
 }

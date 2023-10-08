@@ -28,6 +28,8 @@ dependencies {
     implementation(project(mapOf("path" to ":platform")))
     implementation(project(mapOf("path" to ":auth")))
     implementation(project(mapOf("path" to ":data")))
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }

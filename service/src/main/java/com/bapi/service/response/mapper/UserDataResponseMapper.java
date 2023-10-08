@@ -9,15 +9,15 @@ import org.springframework.stereotype.Component;
 public class UserDataResponseMapper implements IMapper<Person, UserDataResponse> {
     @Override
     public UserDataResponse mapFrom(Person person) {
-        return new UserDataResponse(
-                person.getId(),
-                person.getUserName(),
-                person.getPersonDetails().getFullName(),
-                person.getPersonDetails().getPhoneNo(),
-                person.getPersonDetails().getPicture(),
-                person.getPersonDetails().getFirstName(),
-                person.getPersonDetails().getLastName()
-        );
+        return UserDataResponse.builder()
+                .userId(person.getId())
+                .email(person.getUserName())
+                .fullName(person.getPersonDetails().getFullName())
+                .firstName(person.getPersonDetails().getFirstName())
+                .lastName(person.getPersonDetails().getLastName())
+                .phoneNo(person.getPersonDetails().getPhoneNo())
+                .picture(person.getPersonDetails().getPicture())
+                .build();
     }
 
     @Override

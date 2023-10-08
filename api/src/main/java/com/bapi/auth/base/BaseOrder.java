@@ -25,7 +25,7 @@ public abstract class BaseOrder {
 
     protected BaseResponse<?> getOrderById(String orderId) {
         try {
-            OrderResponse orderResponses = serviceApi.orderService().getOrderById(Long.valueOf(orderId));
+            OrderResponse orderResponses = serviceApi.orderService().getOrderById(orderId);
             return new BaseResponse<>(ResponseStatus.success(), orderResponses);
         } catch (Throwable throwable) {
             return new BaseResponse<>(ResponseStatus.error(throwable.getMessage()), null);
@@ -34,7 +34,7 @@ public abstract class BaseOrder {
 
     protected BaseResponse<?> calculateSumOrder(String orderId) {
         try {
-            SumOfOrderResponse response = serviceApi.orderService().getSumOfOrderById(Long.valueOf(orderId));
+            SumOfOrderResponse response = serviceApi.orderService().getSumOfOrderById(orderId);
             return new BaseResponse<>(ResponseStatus.success(), response);
         } catch (Throwable throwable) {
             return new BaseResponse<>(ResponseStatus.error(throwable.getMessage()), null);

@@ -41,7 +41,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = placeOrderRequestOrderIMapper.mapFrom(placeOrderRequest);
         Long userId = authApi.sessionManager().extractUserIdFromHeader(headerParams);
         Order savedOrder = dataApi.orderRepository().saveByUserId(userId, order);
-        List<OrderItem> orderItems = dataApi.orderDataRepository().saveAll(order.getOrderId(), order.getOrderItems());
+        List<OrderItem> orderItems = dataApi.orderDataRepository().saveAll(savedOrder.getOrderId(), order.getOrderItems());
         savedOrder.setOrderItems(orderItems);
         return orderOrderResponseIMapper.mapFrom(savedOrder);
     }
@@ -50,13 +50,16 @@ public class OrderServiceImpl implements OrderService {
     public OrdersResponse getAllOrdersByUserId(HeaderParams headerParams) {
         Long userId = authApi.sessionManager().extractUserIdFromHeader(headerParams);
         List<Order> orderList = dataApi.orderRepository().findAllByUserId(userId);
-        return new OrdersResponse(orderList.stream()
+        List<PartialOrderResponse> orders = orderList.stream()
                 .map(orderPartialOrderResponseIMapper::mapFrom)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+        return OrdersResponse.builder()
+                .orders(orders)
+                .build();
     }
 
     @Override
-    public OrderResponse getOrderById(Long orderId) throws Throwable {
+    public OrderResponse getOrderById(String orderId) throws Throwable {
         Order order = dataApi.orderRepository().findById(orderId);
         if (order == null) throw new OrderDetailNotFound();
         List<OrderItem> orderItems = dataApi.orderDataRepository().findByOrderId(order.getOrderId());
@@ -65,12 +68,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public SumOfOrderResponse getSumOfOrderById(Long orderId) throws Throwable {
+    public SumOfOrderResponse getSumOfOrderById(String orderId) throws Throwable {
         Order order = dataApi.orderRepository().findById(orderId);
         if (order == null) throw new OrderDetailNotFound();
         List<OrderItem> orderItems = dataApi.orderDataRepository().findByOrderId(order.getOrderId());
         order.setOrderItems(orderItems);
-        return new SumOfOrderResponse(sumOfOrder(order));
+        return SumOfOrderResponse.builder()
+                .sum(sumOfOrder(order))
+                .build();
     }
 
     private Double sumOfOrder(Order order) {

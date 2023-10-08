@@ -1,17 +1,10 @@
 package com.bapi.service.response;
 
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
 public class ProfileUpdateResponse {
     private boolean success;
-
-    public ProfileUpdateResponse(boolean success) {
-        this.success = success;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
 }

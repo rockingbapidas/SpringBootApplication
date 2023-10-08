@@ -1,8 +1,8 @@
 package com.bapi.data.repository.impl;
 
-import com.bapi.data.dao.IOrderEntityDao;
 import com.bapi.data.entity.OrderEntity;
 import com.bapi.data.repository.IOrderRepository;
+import com.bapi.data.source.IOrderDataSource;
 import com.bapi.domain.IMapper;
 import com.bapi.domain.Order;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +18,14 @@ public class OrderRepository implements IOrderRepository {
     private final String TAG = OrderRepository.class.getSimpleName();
 
     @Autowired
-    private IOrderEntityDao orderEntityDao;
+    private IOrderDataSource orderEntityDao;
     @Autowired
     private IMapper<Order, OrderEntity> orderEntityIMapper;
 
     @Override
     public List<Order> findAllByUserId(Long userId) {
         Logger.getLogger(TAG).info("findAllByUserId " + userId);
-        return orderEntityDao.findOrdersByUserId(userId).map(orderEntities -> orderEntities
+        return orderEntityDao.findByUserId(userId).map(orderEntities -> orderEntities
                         .stream()
                         .map(orderEntityIMapper::mapTo)
                         .collect(Collectors.toList()))
@@ -42,7 +42,7 @@ public class OrderRepository implements IOrderRepository {
     }
 
     @Override
-    public Order findById(Long id) {
+    public Order findById(String id) {
         Logger.getLogger(TAG).info("findById " + id);
         return orderEntityDao.findById(id).map(orderEntityIMapper::mapTo).orElse(null);
     }

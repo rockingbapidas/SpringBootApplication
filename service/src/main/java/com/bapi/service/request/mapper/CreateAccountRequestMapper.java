@@ -10,14 +10,14 @@ public class CreateAccountRequestMapper implements IMapper<SignupRequest, Create
     @Override
     public CreateAccount mapFrom(SignupRequest signupRequest) {
         return CreateAccount.builder()
-                .setUserName(signupRequest.getUserName())
-                .setFirstName(signupRequest.getFirstName())
-                .setLastName(signupRequest.getLastName())
-                .setFullName(signupRequest.getFullName())
-                .setPassword(signupRequest.getPassword())
-                .setPhoneNo(signupRequest.getPhoneNo())
-                .setPicture(signupRequest.getPicture())
-                .setRole("USER")
+                .userName(signupRequest.getUserName())
+                .firstName(signupRequest.getFirstName())
+                .lastName(signupRequest.getLastName())
+                .fullName(signupRequest.getFullName())
+                .password(signupRequest.getPassword())
+                .phoneNo(signupRequest.getPhoneNo())
+                .picture(signupRequest.getPicture())
+                .role("USER")
                 .build();
     }
 

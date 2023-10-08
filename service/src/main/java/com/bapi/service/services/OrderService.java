@@ -11,7 +11,7 @@ public interface OrderService {
 
     OrdersResponse getAllOrdersByUserId(HeaderParams headerParams) throws Throwable;
 
-    OrderResponse getOrderById(Long orderId) throws Throwable;
+    OrderResponse getOrderById(String orderId) throws Throwable;
 
-    SumOfOrderResponse getSumOfOrderById(Long orderId) throws Throwable;
+    SumOfOrderResponse getSumOfOrderById(String orderId) throws Throwable;
 }

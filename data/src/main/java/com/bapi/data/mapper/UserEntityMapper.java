@@ -10,28 +10,28 @@ import org.springframework.stereotype.Component;
 public class UserEntityMapper implements IMapper<Person, UserEntity> {
     @Override
     public UserEntity mapFrom(Person person) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUserName(person.getUserName());
-        userEntity.setPassword(person.getPassword());
-        userEntity.setRole(person.getRole().name());
-        userEntity.setEnabled(person.isEnabled());
-        userEntity.setAccountNonExpired(person.isAccountNonExpired());
-        userEntity.setAccountNonLocked(person.isAccountNonLocked());
-        userEntity.setCredentialsNonExpired(person.isCredentialsNonExpired());
-        return userEntity;
+        return UserEntity.builder()
+                .userName(person.getUserName())
+                .password(person.getPassword())
+                .role(person.getRole().name())
+                .enabled(person.isEnabled())
+                .accountNonExpired(person.isAccountNonExpired())
+                .accountNonLocked(person.isAccountNonLocked())
+                .credentialsNonExpired(person.isCredentialsNonExpired())
+                .build();
     }
 
     @Override
     public Person mapTo(UserEntity userEntity) {
-        return new Person(
-                userEntity.getUserId(),
-                userEntity.getUserName(),
-                userEntity.getPassword(),
-                Role.valueOf(userEntity.getRole()),
-                userEntity.isAccountNonExpired(),
-                userEntity.isCredentialsNonExpired(),
-                userEntity.isAccountNonLocked(),
-                userEntity.isEnabled()
-        );
+        return Person.builder()
+                .id(userEntity.getUserId())
+                .userName(userEntity.getUserName())
+                .password(userEntity.getPassword())
+                .role(Role.valueOf(userEntity.getRole()))
+                .accountNonExpired(userEntity.isAccountNonExpired())
+                .credentialsNonExpired(userEntity.isCredentialsNonExpired())
+                .accountNonLocked(userEntity.isAccountNonLocked())
+                .enabled(userEntity.isEnabled())
+                .build();
     }
 }

@@ -10,7 +10,10 @@ public class PartialOrderResponseMapper implements IMapper<Order, PartialOrderRe
 
     @Override
     public PartialOrderResponse mapFrom(Order order) {
-        return new PartialOrderResponse(order.getOrderId(), order.getCreatedAt());
+        return PartialOrderResponse.builder()
+                .orderId(order.getOrderId())
+                .createdAt(order.getCreatedAt())
+                .build();
     }
 
     @Override

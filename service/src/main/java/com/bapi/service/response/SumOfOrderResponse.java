@@ -1,17 +1,10 @@
 package com.bapi.service.response;
 
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
 public class SumOfOrderResponse {
     private double sum;
-
-    public SumOfOrderResponse(double sum) {
-        this.sum = sum;
-    }
-
-    public double getSum() {
-        return sum;
-    }
-
-    public void setSum(double sum) {
-        this.sum = sum;
-    }
 }

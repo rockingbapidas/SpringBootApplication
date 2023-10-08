@@ -1,8 +1,8 @@
 package com.bapi.data.repository.impl;
 
-import com.bapi.data.dao.IUserDataEntityDao;
 import com.bapi.data.entity.UserDataEntity;
 import com.bapi.data.repository.IUserDataRepository;
+import com.bapi.data.source.IUserDetailsDataSource;
 import com.bapi.domain.IMapper;
 import com.bapi.domain.PersonDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +19,13 @@ public class UserDataRepository implements IUserDataRepository {
     private final String TAG = UserDataRepository.class.getSimpleName();
 
     @Autowired
-    private IUserDataEntityDao userDataEntityDao;
+    private IUserDetailsDataSource userDataEntityDao;
 
     @Autowired
     private IMapper<PersonDetails, UserDataEntity> userDataEntityIMapper;
 
     @Override
-    public PersonDetails findById(Long id) {
+    public PersonDetails findById(String id) {
         Logger.getLogger(TAG).info("findById " + id);
         return userDataEntityDao.findById(id).map(userDataEntityIMapper::mapTo).orElse(null);
     }
@@ -64,6 +64,6 @@ public class UserDataRepository implements IUserDataRepository {
     @Override
     public PersonDetails findByUserId(Long userId) {
         Logger.getLogger(TAG).info("findByUserId " + userId);
-        return userDataEntityDao.findUserDataByUserId(userId).map(userDataEntityIMapper::mapTo).orElse(null);
+        return userDataEntityDao.findByUserId(userId).map(userDataEntityIMapper::mapTo).orElse(null);
     }
 }

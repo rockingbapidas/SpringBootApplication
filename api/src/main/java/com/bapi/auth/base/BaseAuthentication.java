@@ -56,7 +56,9 @@ public abstract class BaseAuthentication {
     protected BaseResponse<?> doLogout(HeaderParams headerParams) {
         try {
             serviceApi.authService().logout(headerParams);
-            return new BaseResponse<>(ResponseStatus.success(), new SignOutResponse(true));
+            return new BaseResponse<>(ResponseStatus.success(), SignOutResponse.builder()
+                    .success(true)
+                    .build());
         } catch (Throwable throwable) {
             return new BaseResponse<>(ResponseStatus.error(throwable.getMessage()), null);
         }

@@ -9,20 +9,20 @@ import org.springframework.stereotype.Component;
 public class OrderItemEntityMapper implements IMapper<OrderItem, OrderItemEntity> {
     @Override
     public OrderItemEntity mapFrom(OrderItem orderItem) {
-        OrderItemEntity orderItemEntity = new OrderItemEntity();
-        orderItemEntity.setItem(orderItem.getItem());
-        orderItemEntity.setAmount(orderItem.getAmount());
-        orderItemEntity.setPrice(orderItem.getPrice());
-        return orderItemEntity;
+        return OrderItemEntity.builder()
+                .item(orderItem.getItem())
+                .amount(orderItem.getAmount())
+                .price(orderItem.getPrice())
+                .build();
     }
 
     @Override
     public OrderItem mapTo(OrderItemEntity orderItemEntity) {
-        return new OrderItem(
-                orderItemEntity.getId(),
-                orderItemEntity.getItem(),
-                orderItemEntity.getAmount(),
-                orderItemEntity.getPrice()
-        );
+        return OrderItem.builder()
+                .id(orderItemEntity.getId())
+                .item(orderItemEntity.getItem())
+                .amount(orderItemEntity.getAmount())
+                .price(orderItemEntity.getPrice())
+                .build();
     }
 }

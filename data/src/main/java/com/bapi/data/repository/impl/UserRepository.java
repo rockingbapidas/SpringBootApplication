@@ -1,8 +1,8 @@
 package com.bapi.data.repository.impl;
 
-import com.bapi.data.dao.IUserEntityDao;
 import com.bapi.data.entity.UserEntity;
 import com.bapi.data.repository.IUserRepository;
+import com.bapi.data.source.IUserDataSource;
 import com.bapi.domain.IMapper;
 import com.bapi.domain.Person;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class UserRepository implements IUserRepository {
     private final String TAG = UserRepository.class.getSimpleName();
 
     @Autowired
-    private IUserEntityDao userEntityDao;
+    private IUserDataSource userEntityDao;
 
     @Autowired
     private IMapper<Person, UserEntity> userEntityIMapper;

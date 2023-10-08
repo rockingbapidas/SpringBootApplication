@@ -59,12 +59,12 @@ public class AuthTokenManger implements IAuthTokenManager {
         String token = jwtAuthManager.generateToken(userName);
         Long expiration = jwtAuthManager.extractExpiration(token).getTime();
         return AuthToken.builder()
-                .setDeviceUniqueId(deviceId)
-                .setDeviceType(deviceType)
-                .setAccessToken(token)
-                .setExpiryTime(expiration)
-                .setTokenType(TokenType.JWT.name())
-                .setUserName(userName)
+                .deviceUniqueId(deviceId)
+                .deviceType(deviceType)
+                .accessToken(token)
+                .expiryTime(expiration)
+                .tokenType(TokenType.JWT.name())
+                .userName(userName)
                 .build();
     }
 

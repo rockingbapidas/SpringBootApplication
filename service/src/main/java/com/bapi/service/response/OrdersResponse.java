@@ -1,19 +1,12 @@
 package com.bapi.service.response;
 
+import lombok.Builder;
+import lombok.Data;
+
 import java.util.List;
 
+@Data
+@Builder
 public class OrdersResponse {
     private List<PartialOrderResponse> orders;
-
-    public OrdersResponse(List<PartialOrderResponse> orders) {
-        this.orders = orders;
-    }
-
-    public List<PartialOrderResponse> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<PartialOrderResponse> orders) {
-        this.orders = orders;
-    }
 }

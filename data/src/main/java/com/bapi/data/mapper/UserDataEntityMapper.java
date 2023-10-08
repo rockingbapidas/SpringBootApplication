@@ -9,32 +9,29 @@ import org.springframework.stereotype.Component;
 public class UserDataEntityMapper implements IMapper<PersonDetails, UserDataEntity> {
     @Override
     public UserDataEntity mapFrom(PersonDetails personDetails) {
-        UserDataEntity userDataEntity = new UserDataEntity();
-
-        userDataEntity.setId(personDetails.getId());
-        userDataEntity.setUserId(personDetails.getUserId());
-        userDataEntity.setVersion(personDetails.getVersion());
-
-        userDataEntity.setFirstName(personDetails.getFirstName());
-        userDataEntity.setLastName(personDetails.getLastName());
-        userDataEntity.setFullName(personDetails.getFullName());
-        userDataEntity.setPicture(personDetails.getPicture());
-        userDataEntity.setPhoneNo(personDetails.getPhoneNo());
-
-        return userDataEntity;
+        return UserDataEntity.builder()
+                .id(personDetails.getId())
+                .userId(personDetails.getUserId())
+                .version(personDetails.getVersion())
+                .firstName(personDetails.getFirstName())
+                .lastName(personDetails.getLastName())
+                .fullName(personDetails.getFullName())
+                .picture(personDetails.getPicture())
+                .phoneNo(personDetails.getPhoneNo())
+                .build();
     }
 
     @Override
     public PersonDetails mapTo(UserDataEntity userDataEntity) {
-        return new PersonDetails(
-                userDataEntity.getId(),
-                userDataEntity.getUserId(),
-                userDataEntity.getVersion(),
-                userDataEntity.getFullName(),
-                userDataEntity.getPhoneNo(),
-                userDataEntity.getPicture(),
-                userDataEntity.getFirstName(),
-                userDataEntity.getLastName()
-        );
+        return PersonDetails.builder()
+                .id(userDataEntity.getId())
+                .userId(userDataEntity.getUserId())
+                .version(userDataEntity.getVersion())
+                .firstName(userDataEntity.getFirstName())
+                .lastName(userDataEntity.getLastName())
+                .fullName(userDataEntity.getFullName())
+                .picture(userDataEntity.getPicture())
+                .phoneNo(userDataEntity.getPhoneNo())
+                .build();
     }
 }
