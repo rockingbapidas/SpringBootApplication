@@ -5,10 +5,10 @@ import com.bapi.domain.OrderItem;
 
 import java.util.List;
 
-public interface IOrderDataRepository extends IRepository<OrderItem, Long> {
-    List<OrderItem> findByOrderId(Long orderId);
+public interface IOrderDataRepository extends IRepository<OrderItem, String> {
+    List<OrderItem> findByOrderId(String orderId);
 
-    List<OrderItem> saveAll(Long orderId, List<OrderItem> orderItems);
+    List<OrderItem> saveAll(String orderId, List<OrderItem> orderItems);
 
-    OrderItem saveByOrderId(Long orderId, OrderItem orderItems);
+    OrderItem saveByOrderId(String orderId, OrderItem orderItems);
 }

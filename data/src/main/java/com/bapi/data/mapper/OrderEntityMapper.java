@@ -9,13 +9,16 @@ import org.springframework.stereotype.Component;
 public class OrderEntityMapper implements IMapper<Order, OrderEntity> {
     @Override
     public OrderEntity mapFrom(Order order) {
-        OrderEntity orderEntity = new OrderEntity();
-        orderEntity.setCreatedAt(order.getCreatedAt());
-        return orderEntity;
+        return OrderEntity.builder()
+                .createdAt(order.getCreatedAt())
+                .build();
     }
 
     @Override
     public Order mapTo(OrderEntity orderEntity) {
-        return new Order(orderEntity.getOrderId(), orderEntity.getCreatedAt());
+        return Order.builder()
+                .orderId(orderEntity.getId())
+                .createdAt(orderEntity.getCreatedAt())
+                .build();
     }
 }

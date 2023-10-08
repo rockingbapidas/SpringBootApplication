@@ -35,15 +35,16 @@ configure<JavaPluginExtension> {
 
 dependencies {
     implementation(project(mapOf("path" to ":api")))
-    implementation(project(mapOf("path" to ":auth")))
     implementation(project(mapOf("path" to ":data")))
     implementation(project(mapOf("path" to ":domain")))
-    implementation(project(mapOf("path" to ":platform")))
     implementation(project(mapOf("path" to ":service")))
+    implementation(project(mapOf("path" to ":platform")))
+
+    implementation(project(mapOf("path" to ":auth")))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
     implementation("org.springframework.boot:spring-boot-starter-graphql")
     implementation("com.graphql-java:graphql-java-extended-scalars:20.0")

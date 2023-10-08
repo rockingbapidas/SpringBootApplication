@@ -84,7 +84,7 @@ type AuthResponse {
 }
 
 type UserDataResponse {
-    id: Long
+    userId: Long
     email: String
     fullName: String
     phoneNo: String
@@ -112,12 +112,12 @@ type OrdersResponse {
 }
 
 type PartialOrderResponse {
-    orderId: Long
+    orderId: String
     createdAt: Long
 }
 
 type OrderResponse {
-    orderId: Long
+    orderId: String
     createdAt: Long
     contents: [OrderItemResponse]
 }

@@ -1,8 +1,8 @@
 package com.bapi.data.repository.impl;
 
-import com.bapi.data.dao.IOrderItemEntityDao;
 import com.bapi.data.entity.OrderItemEntity;
 import com.bapi.data.repository.IOrderDataRepository;
+import com.bapi.data.source.IOrderItemDataSource;
 import com.bapi.domain.IMapper;
 import com.bapi.domain.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +19,15 @@ public class OrderDataRepository implements IOrderDataRepository {
     private final String TAG = OrderDataRepository.class.getSimpleName();
 
     @Autowired
-    private IOrderItemEntityDao orderItemEntityDao;
+    private IOrderItemDataSource orderItemEntityDao;
 
     @Autowired
     private IMapper<OrderItem, OrderItemEntity> orderItemEntityIMapper;
 
     @Override
-    public List<OrderItem> findByOrderId(Long orderId) {
+    public List<OrderItem> findByOrderId(String orderId) {
         Logger.getLogger(TAG).info("findByOrderId " + orderId);
-        return orderItemEntityDao.findOrderItemsByOrderId(orderId)
+        return orderItemEntityDao.findByOrderId(orderId)
                 .map(orderItemEntities -> orderItemEntities.stream()
                         .map(orderItemEntityIMapper::mapTo)
                         .collect(Collectors.toList()))
@@ -35,7 +35,7 @@ public class OrderDataRepository implements IOrderDataRepository {
     }
 
     @Override
-    public List<OrderItem> saveAll(Long orderId, List<OrderItem> orderItems) {
+    public List<OrderItem> saveAll(String orderId, List<OrderItem> orderItems) {
         Set<OrderItemEntity> orderItemEntities = orderItems
                 .stream()
                 .map(orderItemEntityIMapper::mapFrom)
@@ -48,12 +48,12 @@ public class OrderDataRepository implements IOrderDataRepository {
     }
 
     @Override
-    public OrderItem saveByOrderId(Long orderId, OrderItem orderItems) {
+    public OrderItem saveByOrderId(String orderId, OrderItem orderItems) {
         return null;
     }
 
     @Override
-    public OrderItem findById(Long id) {
+    public OrderItem findById(String id) {
         Logger.getLogger(TAG).info("findById " + id);
         return orderItemEntityDao.findById(id).map(orderItemEntityIMapper::mapTo).orElse(null);
     }

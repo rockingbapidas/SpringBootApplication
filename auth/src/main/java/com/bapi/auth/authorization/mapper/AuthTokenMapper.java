@@ -9,25 +9,25 @@ import org.springframework.stereotype.Component;
 public class AuthTokenMapper implements IMapper<AuthToken, Token> {
     @Override
     public Token mapFrom(AuthToken authToken) {
-        return new Token(
-                authToken.getDeviceUniqueId(),
-                authToken.getDeviceType(),
-                authToken.getExpiryTime(),
-                authToken.getAccessToken(),
-                authToken.getTokenType(),
-                authToken.getUserName()
-        );
+        return Token.builder()
+                .deviceUniqueId(authToken.getDeviceUniqueId())
+                .deviceType(authToken.getDeviceType())
+                .accessToken(authToken.getAccessToken())
+                .expiresAt(authToken.getExpiryTime())
+                .tokenType(authToken.getTokenType())
+                .userName(authToken.getUserName())
+                .build();
     }
 
     @Override
     public AuthToken mapTo(Token token) {
         return AuthToken.builder()
-                .setDeviceUniqueId(token.getDeviceUniqueId())
-                .setDeviceType(token.getDeviceType())
-                .setAccessToken(token.getAccessToken())
-                .setExpiryTime(token.getExpiresAt())
-                .setTokenType(token.getTokenType())
-                .setUserName(token.getUserName())
+                .deviceUniqueId(token.getDeviceUniqueId())
+                .deviceType(token.getDeviceType())
+                .accessToken(token.getAccessToken())
+                .expiryTime(token.getExpiresAt())
+                .tokenType(token.getTokenType())
+                .userName(token.getUserName())
                 .build();
     }
 }

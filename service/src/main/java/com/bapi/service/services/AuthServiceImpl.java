@@ -56,10 +56,10 @@ public class AuthServiceImpl implements AuthService {
                     headerParams.getDeviceId());
             Token token = authApi.authTokenToTokenMapper().mapFrom(authToken);
 
-            return new AuthResponse(
-                    userDataResponseMapper.mapFrom(newPerson),
-                    tokenResponseMapper.mapFrom(token)
-            );
+            return AuthResponse.builder()
+                    .tokenResponse(tokenResponseMapper.mapFrom(token))
+                    .userDataResponse(userDataResponseMapper.mapFrom(newPerson))
+                    .build();
         }
         throw new SomeThingWentWrong();
     }
@@ -78,10 +78,10 @@ public class AuthServiceImpl implements AuthService {
             AuthToken authToken = authApi.authTokenManager().createToken(person.getUserName(), headerParams.getDeviceType(),
                     headerParams.getDeviceId());
             Token token = authApi.authTokenToTokenMapper().mapFrom(authToken);
-            return new AuthResponse(
-                    userDataResponseMapper.mapFrom(person),
-                    tokenResponseMapper.mapFrom(token)
-            );
+            return AuthResponse.builder()
+                    .tokenResponse(tokenResponseMapper.mapFrom(token))
+                    .userDataResponse(userDataResponseMapper.mapFrom(person))
+                    .build();
         }
         throw new UserInfoNotFound();
     }
@@ -92,7 +92,9 @@ public class AuthServiceImpl implements AuthService {
         Long accountId = authApi.sessionManager().extractUserIdFromHeader(headerParams);
         UpdateAccount updateAccount = updateAccountMapper.mapFrom(profileUpdateRequest);
         boolean update = authApi.accountManager().updateAccount(updateAccount, accountId);
-        return new ProfileUpdateResponse(update);
+        return ProfileUpdateResponse.builder()
+                .success(update)
+                .build();
     }
 
     @Override

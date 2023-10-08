@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 public class TokenResponseMapper implements IMapper<Token, TokenResponse> {
     @Override
     public TokenResponse mapFrom(Token token) {
-        return new TokenResponse(
-                token.getExpiresAt(),
-                token.getAccessToken(),
-                token.getTokenType()
-        );
+        return TokenResponse.builder()
+                .expiry(token.getExpiresAt())
+                .tokenType(token.getTokenType())
+                .userToken(token.getAccessToken())
+                .build();
     }
 
     @Override

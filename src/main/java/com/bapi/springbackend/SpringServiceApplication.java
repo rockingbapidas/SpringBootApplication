@@ -9,6 +9,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.graphql.execution.RuntimeWiringConfigurer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -18,16 +19,17 @@ import java.util.logging.Logger;
 @SpringBootApplication
 @ComponentScan({
         "com.bapi.api",
-        "com.bapi.auth",
         "com.bapi.data",
         "com.bapi.domain",
         "com.bapi.service",
         "com.bapi.platform",
+        "com.bapi.auth",
         "com.bapi.springbackend"
 })
-@EnableJpaRepositories("com.bapi.data.dao")
 @EntityScan("com.bapi.data.entity")
 @EnableTransactionManagement
+@EnableJpaRepositories("com.bapi.data.source")
+@EnableMongoRepositories("com.bapi.data.source")
 public class SpringServiceApplication extends SpringBootServletInitializer {
     private static final String TAG = SpringServiceApplication.class.getSimpleName();
 

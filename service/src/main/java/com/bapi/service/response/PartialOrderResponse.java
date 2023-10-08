@@ -1,27 +1,11 @@
 package com.bapi.service.response;
 
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
 public class PartialOrderResponse {
-    private Long orderId;
+    private String orderId;
     private Long createdAt;
-
-    public PartialOrderResponse(Long orderId, Long createdAt) {
-        this.orderId = orderId;
-        this.createdAt = createdAt;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
-
-    public Long getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Long createdAt) {
-        this.createdAt = createdAt;
-    }
 }

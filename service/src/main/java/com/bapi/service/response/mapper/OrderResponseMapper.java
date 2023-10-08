@@ -19,12 +19,18 @@ public class OrderResponseMapper implements IMapper<Order, OrderResponse> {
         if (order.getOrderItems() != null) {
             orderItemResponseList = order.getOrderItems()
                     .stream()
-                    .map(orderItem -> new OrderItemResponse(orderItem.getItem(),
-                            orderItem.getAmount(),
-                            orderItem.getPrice()))
+                    .map(orderItem -> OrderItemResponse.builder()
+                            .item(orderItem.getItem())
+                            .amount(orderItem.getAmount())
+                            .price(orderItem.getPrice())
+                            .build())
                     .collect(Collectors.toList());
         }
-        return new OrderResponse(order.getOrderId(), order.getCreatedAt(), orderItemResponseList);
+        return OrderResponse.builder()
+                .orderId(order.getOrderId())
+                .contents(orderItemResponseList)
+                .createdAt(order.getCreatedAt())
+                .build();
     }
 
     @Override
