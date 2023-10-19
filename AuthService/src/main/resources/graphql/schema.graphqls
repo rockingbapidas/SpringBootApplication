@@ -1,0 +1,88 @@
+# Query and Mutation will start from here
+type Query {
+    # Authentication Query
+    signIn(loginRequest: LoginRequest): BaseResponse
+    getUserDetails: BaseResponse
+    signOut: BaseResponse
+}
+
+type Mutation {
+    # Authentication Mutation
+    createAccount(signupRequest: SignupRequest): BaseResponse
+    updateUser(profileUpdateRequest: ProfileUpdateRequest): BaseResponse
+}
+
+
+
+# Base Configuration types
+union ResponseType = AuthResponse | UserDataResponse | ProfileUpdateResponse| SignOutResponse
+
+scalar Long
+
+type BaseResponse {
+    status: ResponseStatus
+    response: ResponseType
+}
+
+type ResponseStatus {
+    success: Boolean
+    code: Int
+    message: String
+}
+
+
+# Start Write Request types from from here
+input LoginRequest {
+    userName: String
+    password: String
+}
+
+input SignupRequest {
+    userName: String
+    password: String
+    fullName: String
+    phoneNo: String
+    picture: String
+    firstName: String
+    lastName: String
+}
+
+input ProfileUpdateRequest {
+    fullName: String
+    phoneNo: String
+    picture: String
+    firstName: String
+    lastName: String
+}
+
+
+
+# Start Write Response types from here
+type AuthResponse {
+    userDataResponse: UserDataResponse
+    tokenResponse: TokenResponse
+}
+
+type UserDataResponse {
+    userId: Long
+    email: String
+    fullName: String
+    phoneNo: String
+    picture: String
+    firstName: String
+    lastName: String
+}
+
+type TokenResponse {
+    expiry: Long
+    userToken: String
+    tokenType: String
+}
+
+type ProfileUpdateResponse {
+    success: Boolean
+}
+
+type SignOutResponse {
+    success: Boolean
+}

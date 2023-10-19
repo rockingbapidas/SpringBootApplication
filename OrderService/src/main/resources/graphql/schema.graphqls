@@ -1,0 +1,65 @@
+# Query and Mutation will start from here
+type Query {
+    # Order Query
+    getAllOrders: BaseResponse
+    getOrder(orderId: String): BaseResponse
+    sumOfOrder(orderId: String): BaseResponse
+}
+
+type Mutation {
+    # Order Mutation
+    placeOrder(placeOrderRequest: PlaceOrderRequest): BaseResponse
+}
+
+# Base Configuration types
+union ResponseType = OrdersResponse | OrderResponse| SumOfOrderResponse
+
+scalar Long
+
+type BaseResponse {
+    status: ResponseStatus
+    response: ResponseType
+}
+
+type ResponseStatus {
+    success: Boolean
+    code: Int
+    message: String
+}
+
+input PlaceOrderRequest {
+    itemList: [OrderItemRequest]
+}
+
+input OrderItemRequest {
+    amount: Float
+    name: String
+    price: Float
+}
+
+
+# Start Write Response types from here
+type OrdersResponse {
+    orders: [PartialOrderResponse]
+}
+
+type PartialOrderResponse {
+    orderId: String
+    createdAt: Long
+}
+
+type OrderResponse {
+    orderId: String
+    createdAt: Long
+    contents: [OrderItemResponse]
+}
+
+type OrderItemResponse {
+    amount: Float
+    item: String
+    price: Float
+}
+
+type SumOfOrderResponse {
+    sum: Float
+}

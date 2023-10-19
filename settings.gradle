@@ -1,8 +1,6 @@
 rootProject.name = 'SpringService'
-include 'api'
-include 'service'
-include 'domain'
-include 'data'
 include 'platform'
-include 'auth'
+include 'OrderService'
+include 'AuthService'
+include 'ServiceRegistry'
 
